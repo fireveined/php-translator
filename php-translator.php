@@ -1,12 +1,22 @@
 <?php
+/**
+ * Author:    Name
+ * Created:   5.06.2016
+ * 
+ **/
+
 
 class PHPTranslator {
 
-    public $clients=[];
+    public $clients = [];
     private $_debug = false;
 
     public function addClient($id, $secret) {
-           $this->clients[]=["id"=>$id, "secret"=>$secret];
+           $this->clients[] = ["id"=>$id, "secret"=>$secret];
+    }
+    
+    public function debug($value){
+        $this->_debug = $value;
     }
     
     private function getAccesToken ($clientID, $clientSecret){
@@ -67,7 +77,7 @@ class PHPTranslator {
     
     public function translate($text, $to="en", $from="auto") {
 
-           $client = $this->clients[rand(0,count($this->clients)-1)];
+         $client = $this->clients[rand(0,count($this->clients)-1)];
            
         $accessToken  = $this->getAccesToken($client["id"], $client["secret"]);
         $authHeader = "Authorization: Bearer ". $accessToken;
@@ -80,15 +90,4 @@ class PHPTranslator {
         $xmlObj = simplexml_load_string($strResponse);
         return $xmlObj[0][0];
     }
-
-    public function debug($value){
-        $this->_debug = $value;
-    }
 }
-
-
-
-$trans = new PHPTranslator;
-$trans->debug(true);
-$trans->addClient("fireveined", "D6waee/WZ7GsbwIBq7hSargXGRpFRL0B6mEW3kjrTCs=");
-echo $trans->translate("To jest bardzo długa podróż.");
